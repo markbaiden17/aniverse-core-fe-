@@ -1,7 +1,6 @@
-module.exports = {
+export default {
   plugins: {
-    'tailwindcss/nesting': {}, // Custom Glassmorphism CSS
-    tailwindcss: {},
+    '@tailwindcss/postcss': {},
     autoprefixer: {},
   },
 }
