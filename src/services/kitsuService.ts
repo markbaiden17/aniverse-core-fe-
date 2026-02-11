@@ -1,76 +1,87 @@
 /**
  * kitsuService.ts
  * Service for all Kitsu API calls
- * Handles fetching trending anime, search, and details
+ * Currently using mock data - will integrate real API once issues are resolved
+ * API Endpoint: https://kitsu.app/api/edge (updated from kitsu.io)
  */
 
-import axios from 'axios';
-import { KitsuResponse, Anime } from '../types/anime';
+import type { KitsuResponse, Anime } from '../types/anime';
+import { mockAnimeData } from './mockData';
 
-// Kitsu API base URL
-const KITSU_API_BASE = 'https://kitsu.io/api/edge';
-
-/**
- * Create axios instance with default config for Kitsu API
- * Kitsu requires Content-Type header for API calls
- */
-const kitsuAPI = axios.create({
-  baseURL: KITSU_API_BASE,
-  headers: {
-    'Content-Type': 'application/vnd.api+json',
-    Accept: 'application/vnd.api+json',
-  },
-});
+const KITSU_API_BASE = 'https://kitsu.app/api/edge'; // Updated domain
 
 /**
  * Fetch trending anime sorted by user count (popularity)
- * @param limit - Number of results to return (default: 20)
- * @param offset - Pagination offset (default: 0)
- * @returns Promise with array of anime and metadata
+ * Currently returns mock data - ready to switch to real API
  */
 export const getTrendingAnime = async (
   limit: number = 20,
   offset: number = 0
 ): Promise<KitsuResponse> => {
   try {
-    const response = await kitsuAPI.get<KitsuResponse>('/anime', {
-      params: {
-        'page[limit]': limit,
-        'page[offset]': offset,
-        sort: '-userCount', // Descending order (most popular first)
-        fields: {
-          anime: 'title,description,posterImage,averageRating,episodeCount,status,startDate,endDate,ageRating',
-        },
+    // Try real API first
+    const url = `${KITSU_API_BASE}/anime?page[limit]=${limit}&page[offset]=${offset}&sort=-userCount`;
+    console.log('Fetching from URL:', url);
+
+    const response = await fetch(url);
+
+    if (response.ok) {
+      const data: KitsuResponse = await response.json();
+      console.log('Real API Response:', data);
+      return data;
+    }
+
+    // Fallback to mock data if API fails
+    console.warn('API failed, using mock data');
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    const sliced = mockAnimeData.data.slice(offset, offset + limit);
+    return {
+      data: sliced,
+      meta: {
+        count: mockAnimeData.data.length,
       },
-    });
-    return response.data;
+    };
   } catch (error) {
     console.error('Error fetching trending anime:', error);
-    throw new Error('Failed to fetch trending anime');
+    // Return mock data on error
+    const sliced = mockAnimeData.data.slice(0, limit);
+    return {
+      data: sliced,
+      meta: {
+        count: mockAnimeData.data.length,
+      },
+    };
   }
 };
 
 /**
  * Search for anime by title
- * @param query - Search query string
- * @param limit - Number of results (default: 20)
- * @returns Promise with matching anime
  */
 export const searchAnime = async (
   query: string,
   limit: number = 20
 ): Promise<KitsuResponse> => {
   try {
-    const response = await kitsuAPI.get<KitsuResponse>('/anime', {
-      params: {
-        'filter[text]': query,
-        'page[limit]': limit,
-        fields: {
-          anime: 'title,description,posterImage,averageRating,episodeCount,status,startDate,endDate,ageRating',
-        },
+    const url = `${KITSU_API_BASE}/anime?filter[text]=${encodeURIComponent(query)}&page[limit]=${limit}`;
+    
+    const response = await fetch(url);
+
+    if (response.ok) {
+      return await response.json();
+    }
+
+    // Fallback to mock search
+    const filtered = mockAnimeData.data.filter(anime =>
+      anime.attributes.title.toLowerCase().includes(query.toLowerCase())
+    );
+
+    return {
+      data: filtered.slice(0, limit),
+      meta: {
+        count: filtered.length,
       },
-    });
-    return response.data;
+    };
   } catch (error) {
     console.error('Error searching anime:', error);
     throw new Error(`Failed to search anime: ${query}`);
@@ -79,44 +90,53 @@ export const searchAnime = async (
 
 /**
  * Fetch detailed information about a specific anime
- * @param id - Anime ID
- * @returns Promise with anime details
  */
 export const getAnimeById = async (id: string): Promise<Anime> => {
   try {
-    const response = await kitsuAPI.get<{ data: Anime }>(`/anime/${id}`, {
-      params: {
-        fields: {
-          anime: 'title,description,posterImage,coverImage,averageRating,episodeCount,status,startDate,endDate,ageRating,ageRatingGuide',
-        },
-      },
-    });
-    return response.data.data;
+    const url = `${KITSU_API_BASE}/anime/${id}`;
+    
+    const response = await fetch(url);
+
+    if (response.ok) {
+      const data = await response.json();
+      return data.data;
+    }
+
+    // Fallback to mock data
+    const anime = mockAnimeData.data.find(a => a.id === id);
+    if (!anime) {
+      throw new Error('Anime not found');
+    }
+    return anime;
   } catch (error) {
     console.error(`Error fetching anime ${id}:`, error);
-    throw new Error(`Failed to fetch anime details`);
+    throw new Error('Failed to fetch anime details');
   }
 };
 
 /**
  * Fetch anime by specific genre
- * @param genreId - Genre ID from Kitsu
- * @param limit - Number of results
- * @returns Promise with anime in that genre
  */
 export const getAnimeByGenre = async (
   genreId: string,
   limit: number = 20
 ): Promise<KitsuResponse> => {
   try {
-    const response = await kitsuAPI.get<KitsuResponse>('/anime', {
-      params: {
-        'filter[genres]': genreId,
-        'page[limit]': limit,
-        sort: '-userCount',
+    const url = `${KITSU_API_BASE}/anime?filter[genres]=${genreId}&page[limit]=${limit}&sort=-userCount`;
+    
+    const response = await fetch(url);
+
+    if (response.ok) {
+      return await response.json();
+    }
+
+    // Fallback to mock data
+    return {
+      data: mockAnimeData.data.slice(0, limit),
+      meta: {
+        count: mockAnimeData.data.length,
       },
-    });
-    return response.data;
+    };
   } catch (error) {
     console.error('Error fetching anime by genre:', error);
     throw new Error('Failed to fetch anime by genre');
