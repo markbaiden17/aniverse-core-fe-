@@ -508,7 +508,7 @@ export const mockAnimeData: KitsuResponse = {
       id: '32',
       type: 'anime',
       attributes: {
-        title: 'HunterxHunter',
+        title: 'Hunter x Hunter',
         description: 'A boy dreams of becoming a hunter and finding his father in a dangerous world.',
         posterImage: { original: 'https://media.kitsu.io/anime/poster_images/36/large.jpg' },
         averageRating: 87,

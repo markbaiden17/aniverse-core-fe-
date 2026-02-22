@@ -8,6 +8,7 @@ import { HomePage } from './pages/Home/HomePage';
 import { DiscoverPage } from './pages/Discover/DiscoverPage';
 import { WatchlistPage } from './pages/Watchlist/WatchlistPage';
 import { AnimeDetailPage } from './pages/AnimeDetail/AnimeDetailPage';
+import { SearchResultsPage } from './pages/Search/SearchResultsPage';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/discover" element={<DiscoverPage />} />
         <Route path="/watchlist" element={<WatchlistPage />} />
         <Route path="/anime/:id" element={<AnimeDetailPage />} />
+        <Route path="/search" element={<SearchResultsPage />} />
       </Routes>
     </Router>
   );
