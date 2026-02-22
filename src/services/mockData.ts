@@ -1,7 +1,7 @@
 /**
  * mockData.ts
  * Mock anime data for development
- * Replace with real Kitsu API data once API issues are resolved
+ * IDs are sequential and match order in array
  */
 
 import type { KitsuResponse } from '../types/anime';
@@ -25,7 +25,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '5',
+      id: '2',
       type: 'anime',
       attributes: {
         title: 'Cowboy Bebop',
@@ -41,7 +41,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '6',
+      id: '3',
       type: 'anime',
       attributes: {
         title: 'Trigun',
@@ -57,7 +57,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '7',
+      id: '4',
       type: 'anime',
       attributes: {
         title: 'One Piece',
@@ -73,7 +73,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '8',
+      id: '5',
       type: 'anime',
       attributes: {
         title: 'Neon Genesis Evangelion',
@@ -89,7 +89,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '9',
+      id: '6',
       type: 'anime',
       attributes: {
         title: 'Attack on Titan',
@@ -105,7 +105,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '11',
+      id: '7',
       type: 'anime',
       attributes: {
         title: 'Death Note',
@@ -121,7 +121,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '12',
+      id: '8',
       type: 'anime',
       attributes: {
         title: 'Fullmetal Alchemist',
@@ -136,9 +136,8 @@ export const mockAnimeData: KitsuResponse = {
         ageRatingGuide: null,
       },
     },
-    // Additional anime to support pagination (9-36)
     {
-      id: '13',
+      id: '9',
       type: 'anime',
       attributes: {
         title: 'Bleach',
@@ -154,7 +153,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '14',
+      id: '10',
       type: 'anime',
       attributes: {
         title: 'Jujutsu Kaisen',
@@ -170,7 +169,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '15',
+      id: '11',
       type: 'anime',
       attributes: {
         title: 'My Hero Academia',
@@ -186,7 +185,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '16',
+      id: '12',
       type: 'anime',
       attributes: {
         title: 'Demon Slayer',
@@ -202,7 +201,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '17',
+      id: '13',
       type: 'anime',
       attributes: {
         title: 'Tokyo Ghoul',
@@ -218,7 +217,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '18',
+      id: '14',
       type: 'anime',
       attributes: {
         title: 'Steins;Gate',
@@ -234,7 +233,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '19',
+      id: '15',
       type: 'anime',
       attributes: {
         title: 'Code Geass',
@@ -250,7 +249,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '20',
+      id: '16',
       type: 'anime',
       attributes: {
         title: 'Mob Psycho 100',
@@ -266,7 +265,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '21',
+      id: '17',
       type: 'anime',
       attributes: {
         title: 'Sword Art Online',
@@ -282,7 +281,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '22',
+      id: '18',
       type: 'anime',
       attributes: {
         title: 'Chainsaw Man',
@@ -298,7 +297,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '23',
+      id: '19',
       type: 'anime',
       attributes: {
         title: 'Akira',
@@ -314,7 +313,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '24',
+      id: '20',
       type: 'anime',
       attributes: {
         title: 'Puella Magi Madoka Magica',
@@ -330,7 +329,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '25',
+      id: '21',
       type: 'anime',
       attributes: {
         title: 'Ergo Proxy',
@@ -346,7 +345,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '26',
+      id: '22',
       type: 'anime',
       attributes: {
         title: 'Ghost in the Shell',
@@ -362,7 +361,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '27',
+      id: '23',
       type: 'anime',
       attributes: {
         title: 'Vinland Saga',
@@ -378,7 +377,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '28',
+      id: '24',
       type: 'anime',
       attributes: {
         title: 'Spy x Family',
@@ -394,7 +393,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '29',
+      id: '25',
       type: 'anime',
       attributes: {
         title: 'Samurai Champloo',
@@ -410,7 +409,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '30',
+      id: '26',
       type: 'anime',
       attributes: {
         title: 'Paprika',
@@ -426,7 +425,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '31',
+      id: '27',
       type: 'anime',
       attributes: {
         title: 'Natsume\'s Book of Friends',
@@ -442,7 +441,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '32',
+      id: '28',
       type: 'anime',
       attributes: {
         title: 'Gintama',
@@ -458,7 +457,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '33',
+      id: '29',
       type: 'anime',
       attributes: {
         title: 'Hellbound',
@@ -474,7 +473,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '34',
+      id: '30',
       type: 'anime',
       attributes: {
         title: 'Devilman Crybaby',
@@ -490,7 +489,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '35',
+      id: '31',
       type: 'anime',
       attributes: {
         title: 'Fate/Zero',
@@ -506,7 +505,7 @@ export const mockAnimeData: KitsuResponse = {
       },
     },
     {
-      id: '36',
+      id: '32',
       type: 'anime',
       attributes: {
         title: 'HunterxHunter',
@@ -523,6 +522,6 @@ export const mockAnimeData: KitsuResponse = {
     },
   ],
   meta: {
-    count: 36,
+    count: 32,
   },
 };
