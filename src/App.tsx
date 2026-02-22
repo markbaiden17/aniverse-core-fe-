@@ -6,6 +6,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HomePage } from './pages/Home/HomePage';
 import { DiscoverPage } from './pages/Discover/DiscoverPage';
+import { WatchlistPage } from './pages/Watchlist/WatchlistPage';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/discover" element={<DiscoverPage />} />
+        <Route path="/watchlist" element={<WatchlistPage />} />
       </Routes>
     </Router>
   );
