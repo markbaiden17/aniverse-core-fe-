@@ -5,13 +5,14 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HomePage } from './pages/Home/HomePage';
+import { DiscoverPage } from './pages/Discover/DiscoverPage';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        {/* Additional routes will be added here */}
+        <Route path="/discover" element={<DiscoverPage />} />
       </Routes>
     </Router>
   );
