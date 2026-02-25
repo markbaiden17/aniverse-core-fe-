@@ -20,7 +20,7 @@ import { Link } from 'react-router-dom';
 import AnimeCharacters from '../../assets/images/AnimeCharacters.svg';
 
 
-const ANIME_PER_PAGE = 20;
+const ANIME_PER_PAGE = typeof window !== 'undefined' && window.innerWidth < 768 ? 20 : 30;
 
 type WatchStatus = 'all' | 'watching' | 'plan' | 'completed';
 
@@ -146,8 +146,8 @@ export function WatchlistPage() {
                   to={`/anime/${featuredAnime.id}`}
                   className="flex items-center gap-2 px-8 py-3 bg-primary hover:bg-secondary text-white font-bold rounded-lg transition-colors"
                 >
-                  <Play size={20} />
-                  Continue Watching
+                  <Play size={18} />
+                  Continue Watching...
                 </Link>
               </div>
             </motion.div>
@@ -189,14 +189,14 @@ export function WatchlistPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="flex flex-wrap gap-3 mb-10"
+          className="flex flex-wrap sm:flex-nowrap gap-2 mb-10 overflow-x-auto"
         >
           <button
             onClick={() => {
               setFilterStatus('all');
               setCurrentPage(1);
             }}
-            className={`px-6 py-2 rounded-lg font-semibold transition-all ${
+            className={`px-3 sm:px-6 py-2 rounded-lg font-semibold transition-all text-xs sm:text-base whitespace-nowrap ${
               filterStatus === 'all'
                 ? 'bg-primary text-white'
                 : 'bg-card text-gray-300 hover:bg-primary/20'
@@ -209,13 +209,13 @@ export function WatchlistPage() {
               setFilterStatus('watching');
               setCurrentPage(1);
             }}
-            className={`px-6 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 ${
+            className={`px-3 sm:px-6 py-2 rounded-lg font-semibold transition-all text-xs sm:text-base whitespace-nowrap ${
               filterStatus === 'watching'
                 ? 'bg-primary text-white'
                 : 'bg-card text-gray-300 hover:bg-primary/20'
             }`}
           >
-            <Play size={18} />
+            <Play size={16} />
             Watching
           </button>
           <button
@@ -223,13 +223,13 @@ export function WatchlistPage() {
               setFilterStatus('plan');
               setCurrentPage(1);
             }}
-            className={`px-6 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 ${
+            className={`px-3 sm:px-6 py-2 rounded-lg font-semibold transition-all text-xs sm:text-base whitespace-nowrap ${
               filterStatus === 'plan'
                 ? 'bg-primary text-white'
                 : 'bg-card text-gray-300 hover:bg-primary/20'
             }`}
           >
-            <Plus size={18} />
+            <Plus size={16} />
             Plan to Watch
           </button>
           <button
@@ -237,13 +237,13 @@ export function WatchlistPage() {
               setFilterStatus('completed');
               setCurrentPage(1);
             }}
-            className={`px-6 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 ${
+            className={`px-3 sm:px-6 py-2 rounded-lg font-semibold transition-all text-xs sm:text-base whitespace-nowrap ${
               filterStatus === 'completed'
                 ? 'bg-primary text-white'
                 : 'bg-card text-gray-300 hover:bg-primary/20'
             }`}
           >
-            <Check size={18} />
+            <Check size={16} />
             Completed
           </button>
         </motion.div>

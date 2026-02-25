@@ -5,10 +5,11 @@
  */
 
 import type { Anime } from '../../types/anime';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Play, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Plus, Check } from 'lucide-react';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 interface FeaturedAnimeCarouselProps {
   animeList: Anime[];
@@ -16,9 +17,14 @@ interface FeaturedAnimeCarouselProps {
 
 export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [watchlist, setWatchlist] = useLocalStorage<string[]>('watchlist', []);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
 
   const currentAnime = animeList[currentIndex];
   const { id, attributes: { title, posterImage, description, averageRating, episodeCount } } = currentAnime;
+
+  const isInWatchlist = watchlist.includes(id);
 
   const handlePrevious = () => {
     setCurrentIndex((prev) => (prev === 0 ? animeList.length - 1 : prev - 1));
@@ -26,6 +32,33 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev === animeList.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleAddToWatchlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setWatchlist((prev) =>
+      prev.includes(id)
+        ? prev.filter((animeId) => animeId !== id)
+        : [...prev, id]
+    );
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    touchEndX.current = e.changedTouches[0].clientX;
+    const difference = touchStartX.current - touchEndX.current;
+
+    // Swiped left (show next)
+    if (difference > 50) {
+      handleNext();
+    }
+    // Swiped right (show previous)
+    else if (difference < -50) {
+      handlePrevious();
+    }
   };
 
   return (
@@ -37,7 +70,9 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="relative rounded-xl overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          className="relative rounded-xl overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 cursor-grab active:cursor-grabbing"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 sm:p-12 items-center">
             {/* Left: Poster Image */}
@@ -82,25 +117,41 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
                   )}
                 </div>
 
-                {/* Description */}
+                {/* Description - Hidden on mobile */}
                 {description && (
-                  <p className="text-gray-300 text-sm sm:text-base mb-8 line-clamp-4">
+                  <p className="hidden sm:block text-gray-300 text-sm sm:text-base mb-8 line-clamp-4">
                     {description}
                   </p>
                 )}
 
-                {/* Buttons */}
-                <div className="flex gap-4 justify-center md:justify-start mb-8">
+                {/* Buttons - Desktop: Full buttons, Mobile: Icons only */}
+                <div className="flex gap-2 sm:gap-4 justify-center md:justify-start mb-8">
                   <Link
                     to={`/anime/${id}`}
-                    className="flex items-center gap-2 px-6 sm:px-8 py-3 bg-primary hover:bg-secondary text-white font-bold rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-3 sm:px-8 py-2 sm:py-3 bg-primary hover:bg-secondary text-white font-bold rounded-lg transition-colors"
                   >
-                    <Play size={20} />
-                    Start Watching
+                    <Play size={18} className="sm:w-5 sm:h-5" />
+                    <span className="hidden sm:inline">Start Watching</span>
                   </Link>
-                  <button className="flex items-center gap-2 px-6 sm:px-8 py-3 bg-card border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold rounded-lg transition-all">
-                    <Plus size={20} />
-                    Add to Watchlist
+                  <button
+                    onClick={handleAddToWatchlist}
+                    className={`flex items-center gap-2 px-3 sm:px-8 py-2 sm:py-3 font-bold rounded-lg transition-all ${
+                      isInWatchlist
+                        ? 'bg-primary text-white hover:bg-secondary'
+                        : 'bg-card border-2 border-primary text-primary hover:bg-primary hover:text-white'
+                    }`}
+                  >
+                    {isInWatchlist ? (
+                      <>
+                        <Check size={18} className="sm:w-5 sm:h-5" />
+                        <span className="hidden sm:inline">In Watchlist</span>
+                      </>
+                    ) : (
+                      <>
+                        <Plus size={18} className="sm:w-5 sm:h-5" />
+                        <span className="hidden sm:inline">Add to Watchlist</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </motion.div>

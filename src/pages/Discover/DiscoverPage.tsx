@@ -17,7 +17,7 @@ import { kitsuService } from '../../services/kitsuService';
 import type { Anime } from '../../types/anime';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 
-const ANIME_PER_PAGE = 30; // 4 columns × 7 rows
+const ANIME_PER_PAGE = typeof window !== 'undefined' && window.innerWidth < 768 ? 20 : 30;
 
 export function DiscoverPage() {
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);

@@ -316,7 +316,7 @@ export const mockAnimeData: KitsuResponse = {
       id: '20',
       type: 'anime',
       attributes: {
-        title: 'Puella Magi Madoka Magica',
+        title: 'Madoka Magica',
         description: 'A young girl is offered magical powers by a mysterious creature.',
         posterImage: { original: 'https://media.kitsu.io/anime/poster_images/24/large.jpg' },
         averageRating: 84,
@@ -428,7 +428,7 @@ export const mockAnimeData: KitsuResponse = {
       id: '27',
       type: 'anime',
       attributes: {
-        title: 'Natsume\'s Book of Friends',
+        title: 'Natsume\'s Friends',
         description: 'A boy with the ability to see spirits inherits a book of supernatural beings.',
         posterImage: { original: 'https://media.kitsu.io/anime/poster_images/31/large.jpg' },
         averageRating: 82,

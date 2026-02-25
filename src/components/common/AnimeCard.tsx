@@ -63,7 +63,7 @@ export function AnimeCard({
 
           {/* Overlay with info on hover */}
           <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-            <h3 className="text-white font-bold mb-2 line-clamp-2">{title}</h3>
+            <h3 className="text-white font-bold text-sm line-clamp-2">{title}</h3>
             {rating !== 'N/A' && (
               <div className="flex items-center gap-1">
                 <span className="text-yellow-400">⭐</span>

@@ -3,7 +3,7 @@
  * Reusable pagination component for browsing multiple pages
  */
 
-import { ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface PaginationProps {
@@ -51,6 +51,19 @@ export function Pagination({
       transition={{ duration: 0.3 }}
       className="flex items-center justify-center gap-2 mt-12 mb-8"
     >
+      {/* Previous Button */}
+      {currentPage > 1 && (
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          onClick={() => onPageChange(currentPage - 1)}
+          className="p-2 mr-2 bg-card hover:bg-primary text-gray-300 hover:text-white rounded-lg transition-colors"
+          aria-label="Previous page"
+        >
+          <ChevronLeft size={20} />
+        </motion.button>
+      )}
+
       {pageNumbers.map((page, index) => (
         <motion.div
           key={index}

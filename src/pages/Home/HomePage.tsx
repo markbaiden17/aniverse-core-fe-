@@ -23,7 +23,6 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import G5Luffy from '../../assets/images/G5Luffy.svg';
 import AnimeBackground from '../../assets/images/AnimeBackground.svg';
 
-
 export function HomePage() {
   const [trendingAnime, setTrendingAnime] = useState<Anime[]>([]);
   const [loading, setLoading] = useState(true);

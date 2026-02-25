@@ -32,14 +32,18 @@ export function AnimeDetailPage() {
         setLoading(true);
         setError(null);
 
-        // Always fetch Naruto (ID '1') regardless of which anime was clicked
-        const animeData = await kitsuService.getAnimeById('1');
+        if (!id) {
+          throw new Error('No anime ID provided');
+        }
+
+        // Fetch the anime with the ID from the URL parameter
+        const animeData = await kitsuService.getAnimeById(id);
         setAnime(animeData);
 
         // Fetch similar anime
         const allAnime = await kitsuService.getTrendingAnime(100);
         const similar = allAnime.data
-          .filter((a) => a.id !== '1')
+          .filter((a) => a.id !== id)
           .slice(0, 10);
         setSimilarAnime(similar);
       } catch (err) {
@@ -51,7 +55,7 @@ export function AnimeDetailPage() {
     };
 
     fetchAnime();
-  }, []);
+  }, [id]); // Include id in dependency array
 
   const handleAddToWatchlist = () => {
     if (!anime) return;
