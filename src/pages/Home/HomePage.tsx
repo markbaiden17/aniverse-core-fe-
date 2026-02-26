@@ -49,14 +49,6 @@ export function HomePage() {
     fetchAnime();
   }, []);
 
-  const _handleAddToWatchlist = (animeId: string) => {
-    setWatchlist((prev) =>
-      prev.includes(animeId)
-        ? prev.filter((id) => id !== animeId)
-        : [...prev, animeId]
-    );
-  };
-
   const handleRetry = () => {
     window.location.reload();
   };

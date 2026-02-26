@@ -72,18 +72,6 @@ export function WatchlistPage() {
     );
   };
 
-  const _handleStatusChange = (animeId: string, status: WatchStatus) => {
-    setWatchlistStatus((prev) => {
-      const existing = prev.find((item) => item.id === animeId);
-      if (existing) {
-        return prev.map((item) =>
-          item.id === animeId ? { ...item, status } : item
-        );
-      }
-      return [...prev, { id: animeId, status }];
-    });
-  };
-
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({
