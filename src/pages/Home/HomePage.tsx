@@ -27,7 +27,7 @@ export function HomePage() {
   const [trendingAnime, setTrendingAnime] = useState<Anime[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [_watchlist, setWatchlist] = useLocalStorage<string[]>('watchlist', []);
+  const [_watchlist] = useLocalStorage<string[]>('watchlist', []);
 
   useEffect(() => {
     const fetchAnime = async () => {
