@@ -27,7 +27,7 @@ export function HomePage() {
   const [trendingAnime, setTrendingAnime] = useState<Anime[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [watchlist, setWatchlist] = useLocalStorage<string[]>('watchlist', []);
+  const [_watchlist, setWatchlist] = useLocalStorage<string[]>('watchlist', []);
 
   useEffect(() => {
     const fetchAnime = async () => {
@@ -49,7 +49,7 @@ export function HomePage() {
     fetchAnime();
   }, []);
 
-  const handleAddToWatchlist = (animeId: string) => {
+  const _handleAddToWatchlist = (animeId: string) => {
     setWatchlist((prev) =>
       prev.includes(animeId)
         ? prev.filter((id) => id !== animeId)

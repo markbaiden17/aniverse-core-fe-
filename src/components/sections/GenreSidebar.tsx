@@ -3,7 +3,6 @@
  * Left sidebar with genre list for filtering
  */
 
-import type { Genre } from '../../types/genre';
 import { ANIME_GENRES } from '../../types/genre';
 import { motion } from 'framer-motion';
 
@@ -39,7 +38,7 @@ export function GenreSidebar({ selectedGenre, onSelectGenre }: GenreSidebarProps
           </button>
 
           {/* Genre List */}
-          {ANIME_GENRES.map((genre, index) => (
+          {ANIME_GENRES.map((genre) => (
             <div key={genre.id}>
               <button
                 onClick={() => onSelectGenre(genre.id)}

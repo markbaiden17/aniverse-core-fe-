@@ -72,7 +72,7 @@ export function WatchlistPage() {
     );
   };
 
-  const handleStatusChange = (animeId: string, status: WatchStatus) => {
+  const _handleStatusChange = (animeId: string, status: WatchStatus) => {
     setWatchlistStatus((prev) => {
       const existing = prev.find((item) => item.id === animeId);
       if (existing) {
