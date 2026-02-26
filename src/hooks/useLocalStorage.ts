@@ -4,7 +4,7 @@
  * For watchlist/favorites functionality
  */
 
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 
 /**
  * Custom hook for localStorage management
