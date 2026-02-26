@@ -6,7 +6,9 @@
 import type { KitsuResponse, Anime } from '../types/anime';
 import { mockAnimeData } from './mockData';
 
-const ANILIST_API = 'https://graphql.anilist.co';
+const ANILIST_API = import.meta.env.MODE === 'production' 
+  ? 'https://graphql.anilist.co'
+  : 'http://localhost:3001/graphql';
 
 // Convert AniList data to our Anime format
 const convertAniListToAnime = (anilistAnime: any): Anime => {
@@ -258,10 +260,10 @@ export const getAnimeById = async (id: string): Promise<Anime> => {
 };
 
 /**
- * Get anime by genre from AniList API (using tag search)
+ * Get anime by genre from AniList API
  */
 export const getAnimeByGenre = async (
-  genreId: string,
+  _genreId: string,
   limit: number = 20
 ): Promise<KitsuResponse> => {
   try {

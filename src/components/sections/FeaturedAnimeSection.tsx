@@ -74,7 +74,7 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
           onTouchEnd={handleTouchEnd}
           className="relative rounded-xl overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 cursor-grab active:cursor-grabbing"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 sm:p-12 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 sm:p-12 items-center min-h-96">
             {/* Left: Poster Image */}
             <div className="flex justify-center md:justify-start">
               <div className="w-48 h-64 sm:w-56 sm:h-72 md:w-64 md:h-80 rounded-lg overflow-hidden shadow-2xl">
@@ -89,11 +89,12 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
             </div>
 
             {/* Right: Information */}
-            <div className="text-center md:text-left">
+            <div className="text-center md:text-left flex flex-col justify-center h-96">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
+                className="flex flex-col h-full"
               >
                 <h3 className="text-4xl sm:text-5xl font-bold mb-4 text-white">
                   {title}
@@ -101,7 +102,7 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
 
                 {/* Stats */}
                 <div className="flex flex-wrap gap-4 justify-center md:justify-start mb-6 text-sm sm:text-base">
-                  {episodeCount && (
+                  {episodeCount && episodeCount > 0 && (
                     <div className="bg-primary/20 px-4 py-2 rounded-lg">
                       <span className="text-gray-300">Episodes: </span>
                       <span className="text-white font-bold">{episodeCount}</span>
@@ -119,13 +120,15 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
 
                 {/* Description - Hidden on mobile */}
                 {description && (
-                  <p className="hidden sm:block text-gray-300 text-sm sm:text-base mb-8 line-clamp-4">
-                    {description}
-                  </p>
+                  <div className="hidden sm:block h-24 mb-8 overflow-hidden flex-grow">
+                    <p className="text-gray-300 text-sm sm:text-base line-clamp-4">
+                      {description}
+                    </p>
+                  </div>
                 )}
 
                 {/* Buttons - Desktop: Full buttons, Mobile: Icons only */}
-                <div className="flex gap-2 sm:gap-4 justify-center md:justify-start mb-8">
+                <div className="flex gap-2 sm:gap-4 justify-center md:justify-start">
                   <Link
                     to={`/anime/${id}`}
                     className="flex items-center gap-2 px-3 sm:px-8 py-2 sm:py-3 bg-primary hover:bg-secondary text-white font-bold rounded-lg transition-colors"
