@@ -82,8 +82,8 @@ export function AnimeCard({
       </Link>
 
       {/* Card Info Below */}
-      <div className="mt-3">
-        <h3 className="font-bold text-sm text-white line-clamp-2 hover:text-primary transition-colors">
+      <div className="mt-3 flex flex-col">
+        <h3 className="font-bold text-sm text-white line-clamp-1 h-5 hover:text-primary transition-colors">
           {title}
         </h3>
 
@@ -94,7 +94,7 @@ export function AnimeCard({
               e.preventDefault();
               onAddToWatchlist(id);
             }}
-            className={`mt-2 w-full py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
+            className={`mt-2 w-full h-9 rounded-lg text-xs sm:text-sm font-semibold transition-all border flex items-center justify-center ${
               isInWatchlist
                 ? 'bg-secondary text-white'
                 : 'bg-card border border-primary text-primary hover:bg-primary hover:text-white'
