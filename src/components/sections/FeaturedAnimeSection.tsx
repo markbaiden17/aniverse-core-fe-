@@ -130,24 +130,24 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
                     <Play size={18} className="sm:w-5 sm:h-5" />
                     <span className="hidden sm:inline">Start Watching</span>
                   </Link>
+
                   <button
                     onClick={handleAddToWatchlist}
-                    className={`flex items-center justify-center gap-2 px-3 sm:px-8 py-2 sm:py-3 font-bold rounded-lg transition-all ${
+                    className={`flex items-center justify-center gap-2 rounded-lg transition-all font-bold w-[200px] h-11 border-2 ${
                       isInWatchlist
                         ? 'bg-primary text-white hover:bg-secondary'
                         : 'bg-card border-2 border-primary text-primary hover:bg-primary hover:text-white'
                     }`}
-                    style={{ minWidth: '160px' }}
                   >
                     {isInWatchlist ? (
                       <>
-                        <Check size={18} className="sm:w-5 sm:h-5" />
-                        <span className="hidden sm:inline">In Watchlist</span>
+                        <Check size={18} className="shrink-0" />
+                        <span className="whitespace-nowrap">In Watchlist</span>
                       </>
                     ) : (
                       <>
-                        <Plus size={18} className="sm:w-5 sm:h-5" />
-                        <span className="hidden sm:inline">Add to Watchlist</span>
+                        <Plus size={18} className="shrink-0" />
+                        <span className="whitespace-nowrap">Add to Watchlist</span>
                       </>
                     )}
                   </button>
