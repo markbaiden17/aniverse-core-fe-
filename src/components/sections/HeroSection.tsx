@@ -1,7 +1,8 @@
 /**
  * HeroSection.tsx
- * Hero section with background image and call-to-action
- * Uses SVG assets for Luffy and One Piece branding
+ * High-impact landing section with dynamic assets.
+ * Features: Multi-layer background (Image + Gradient), 
+ * Framer Motion entrance animations, and responsive asset scaling.
  */
 
 import { motion } from 'framer-motion';
@@ -20,6 +21,7 @@ export function HeroSection({
 }: HeroSectionProps) {
   return (
     <div 
+      /* --- Layer 1: Background Image & Container --- */
       className="relative py-16 sm:py-24 md:py-32 border-b border-primary/20 overflow-hidden"
       style={{
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
@@ -27,12 +29,14 @@ export function HeroSection({
         backgroundPosition: 'center',
       }}
     >
-      {/* Gradient overlay on top of background */}
+      {/* --- Layer 2: Visual Depth Gradient Overlay --- */}
       <div className="absolute inset-0 bg-gradient-to-r from-dark via-dark/60 to-dark/40 z-10" />
 
+      {/* --- Layer 3: Interactive Content Grid --- */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          {/* Left: Text Content */}
+          
+          {/* Left: Branding and CTA */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -57,7 +61,7 @@ export function HeroSection({
             </Link>
           </motion.div>
 
-          {/* Right: SVG Assets */}
+          {/* Right: Thematic SVG/Image Assets */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -65,7 +69,8 @@ export function HeroSection({
             className="flex justify-center lg:justify-end items-center h-full"
           >
             <div className="relative w-full max-w-md h-96 sm:h-[500px] md:h-[600px]">
-              {/* Character Image (Luffy) */}
+              
+              {/* Character Layer (e.g., Luffy) */}
               {characterImage && (
                 <img
                   src={characterImage}
@@ -74,7 +79,7 @@ export function HeroSection({
                 />
               )}
 
-              {/* Logo Image (One Piece) */}
+              {/* Logo/Branding Layer (e.g., One Piece Logo) */}
               {logoImage && (
                 <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4">
                   <img
@@ -86,6 +91,7 @@ export function HeroSection({
               )}
             </div>
           </motion.div>
+
         </div>
       </div>
     </div>

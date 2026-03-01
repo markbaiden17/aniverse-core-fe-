@@ -1,6 +1,8 @@
 /**
  * CarouselAnimeCard.tsx
- * Carousel card with title always visible below, rating on hover
+ * Specialized card for carousel layouts.
+ * Features: Fixed-width scaling, persistent title display, and a hover-triggered 
+ * rating/watchlist overlay.
  */
 
 import type { Anime } from '../../types/anime';
@@ -15,11 +17,13 @@ interface CarouselAnimeCardProps {
 }
 
 export function CarouselAnimeCard({ anime }: CarouselAnimeCardProps) {
+  // --- State & Storage ---
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [watchlist, setWatchlist] = useLocalStorage<string[]>('watchlist', []);
 
+  // --- Data Extraction ---
   const {
     id,
     attributes: { title, posterImage, averageRating },
@@ -29,9 +33,11 @@ export function CarouselAnimeCard({ anime }: CarouselAnimeCardProps) {
   const rating = averageRating ? Math.round(averageRating) : 'N/A';
   const isInWatchlist = watchlist.includes(id);
 
+  // --- Event Handlers ---
   const handleAddToWatchlist = (e: React.MouseEvent) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent Link navigation
     e.stopPropagation();
+    
     setWatchlist((prev) =>
       prev.includes(id)
         ? prev.filter((animeId) => animeId !== id)
@@ -50,7 +56,7 @@ export function CarouselAnimeCard({ anime }: CarouselAnimeCardProps) {
           transition={{ duration: 0.3 }}
           className="relative w-40 sm:w-48 md:w-56 h-56 sm:h-64 md:h-72 overflow-hidden rounded-lg bg-card cursor-pointer"
         >
-          {/* Image */}
+          {/* Image Layer */}
           {imageLoading && !imageError && (
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 animate-pulse z-0" />
           )}
@@ -74,10 +80,10 @@ export function CarouselAnimeCard({ anime }: CarouselAnimeCardProps) {
             </div>
           )}
 
-          {/* Dark overlay base - always visible */}
+          {/* Visual Scrim (Base Overlay) */}
           <div className="absolute inset-0 bg-black/40 z-5" />
 
-          {/* Rating overlay - only on hover */}
+          {/* Hover Content: Rating & Watchlist Toggle */}
           {isHovered && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -94,7 +100,6 @@ export function CarouselAnimeCard({ anime }: CarouselAnimeCardProps) {
                 </div>
               )}
               
-              {/* Watchlist button on hover */}
               <button
                 onClick={handleAddToWatchlist}
                 className={`flex items-center gap-2 px-3 py-2 rounded text-xs font-bold transition-all ${
@@ -105,13 +110,11 @@ export function CarouselAnimeCard({ anime }: CarouselAnimeCardProps) {
               >
                 {isInWatchlist ? (
                   <>
-                    <BookmarkCheck size={14} />
-                    In List
+                    <BookmarkCheck size={14} /> In List
                   </>
                 ) : (
                   <>
-                    <BookmarkPlus size={14} />
-                    Add to List
+                    <BookmarkPlus size={14} /> Add to List
                   </>
                 )}
               </button>
@@ -120,8 +123,8 @@ export function CarouselAnimeCard({ anime }: CarouselAnimeCardProps) {
         </motion.div>
       </Link>
 
-      {/* Title below card - always visible with ellipsis */}
-      <div style={{ width: '160px', overflow: 'hidden' }}>
+      {/* External Title Label */}
+      <div className="mt-2" style={{ width: '100%', overflow: 'hidden' }}>
         <h3 className="text-white font-bold text-xs sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis">
           {title}
         </h3>

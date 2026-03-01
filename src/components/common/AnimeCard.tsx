@@ -1,7 +1,7 @@
 /**
  * AnimeCard.tsx
- * Reusable card component for displaying anime in grid
- * Shows poster, title, rating, and action buttons
+ * Reusable card component for displaying anime in a grid layout.
+ * Features: Lazy loading images, hover overlays, and watchlist toggles.
  */
 
 import type { Anime } from '../../types/anime';
@@ -20,9 +20,11 @@ export function AnimeCard({
   onAddToWatchlist,
   isInWatchlist = false,
 }: AnimeCardProps) {
+  // --- State Management ---
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
 
+  // --- Data Preparation ---
   const {
     id,
     attributes: { title, posterImage, averageRating },
@@ -38,12 +40,16 @@ export function AnimeCard({
       transition={{ duration: 0.3 }}
       className="group"
     >
+      {/* Poster Image & Hover Info */}
       <Link to={`/anime/${id}`}>
         <div className="relative overflow-hidden rounded-lg bg-card h-64 sm:h-72 md:h-80 cursor-pointer">
-          {/* Image */}
+          
+          {/* Loading Skeleton */}
           {imageLoading && (
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 animate-pulse" />
           )}
+
+          {/* Dynamic Image Loading */}
           {!imageError && posterUrl ? (
             <img
               src={posterUrl}
@@ -61,7 +67,7 @@ export function AnimeCard({
             </div>
           )}
 
-          {/* Overlay with info on hover */}
+          {/* Interaction Overlay (Visible on Hover) */}
           <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
             <h3 className="text-white font-bold text-sm line-clamp-1 h-5">{title}</h3>
             {rating !== 'N/A' && (
@@ -72,7 +78,7 @@ export function AnimeCard({
             )}
           </div>
 
-          {/* Rating Badge (static) */}
+          {/* Rating Badge (Always Visible) */}
           {rating !== 'N/A' && (
             <div className="absolute top-3 right-3 bg-primary px-2.5 py-1 rounded text-xs sm:text-sm font-bold text-white">
               {rating}%
@@ -81,13 +87,13 @@ export function AnimeCard({
         </div>
       </Link>
 
-      {/* Card Info Below */}
+      {/* Static Info & Actions Below Card */}
       <div className="mt-3 flex flex-col">
         <h3 className="font-bold text-sm text-white line-clamp-1 h-5 hover:text-primary transition-colors">
           {title}
         </h3>
 
-        {/* Watchlist Button */}
+        {/* Watchlist Toggle Action */}
         {onAddToWatchlist && (
           <button
             onClick={(e) => {

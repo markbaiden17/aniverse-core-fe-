@@ -8,6 +8,7 @@ import type { KitsuResponse } from '../types/anime';
 
 export const mockAnimeData: KitsuResponse = {
   data: [
+    // --- Classics & Shonen ---
     {
       id: '1',
       type: 'anime',
@@ -72,6 +73,7 @@ export const mockAnimeData: KitsuResponse = {
         ageRatingGuide: null,
       },
     },
+    // --- Seinen & Psychological ---
     {
       id: '5',
       type: 'anime',
@@ -152,6 +154,7 @@ export const mockAnimeData: KitsuResponse = {
         ageRatingGuide: null,
       },
     },
+    // --- Modern Hits ---
     {
       id: '10',
       type: 'anime',
@@ -296,6 +299,7 @@ export const mockAnimeData: KitsuResponse = {
         ageRatingGuide: null,
       },
     },
+    // --- Films & Cult Favorites ---
     {
       id: '19',
       type: 'anime',
@@ -413,7 +417,7 @@ export const mockAnimeData: KitsuResponse = {
       type: 'anime',
       attributes: {
         title: 'Paprika',
-        description: 'A scientist\'s experimental drug allows people to share their dreams.',
+        description: "A scientist's experimental drug allows people to share their dreams.",
         posterImage: { original: 'https://media.kitsu.io/anime/poster_images/30/large.jpg' },
         averageRating: 83,
         episodeCount: 1,
@@ -428,7 +432,7 @@ export const mockAnimeData: KitsuResponse = {
       id: '27',
       type: 'anime',
       attributes: {
-        title: 'Natsume\'s Friends',
+        title: "Natsume's Friends",
         description: 'A boy with the ability to see spirits inherits a book of supernatural beings.',
         posterImage: { original: 'https://media.kitsu.io/anime/poster_images/31/large.jpg' },
         averageRating: 82,

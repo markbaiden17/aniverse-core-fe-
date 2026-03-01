@@ -1,7 +1,7 @@
 /**
  * HomePage.tsx
- * Landing page with hero section, featured anime, and popular shows
- * Main entry point for users
+ * The central hub of AniVerse. 
+ * Orchestrates Hero visuals, featured anime spotlights, and popular content sliders.
  */
 
 import { useEffect, useState } from 'react';
@@ -19,21 +19,28 @@ import { kitsuService } from '../../services/kitsuService';
 import type { Anime } from '../../types/anime';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 
-// Import SVG assets
+// --- Assets ---
+// Using SVGs for character art ensures crisp visuals across all resolutions
 import G5Luffy from '../../assets/images/G5Luffy.svg';
 import AnimeBackground from '../../assets/images/AnimeBackground.svg';
 
 export function HomePage() {
+  // --- State Hooks ---
   const [trendingAnime, setTrendingAnime] = useState<Anime[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Watchlist is initialized here to ensure local storage is ready for child components
   const [_watchlist] = useLocalStorage<string[]>('watchlist', []);
 
+  // --- Data Lifecycle ---
   useEffect(() => {
     const fetchAnime = async () => {
       try {
         setLoading(true);
         setError(null);
+        
+        // Fetch 30 items to populate both Featured and Popular sections
         const response = await kitsuService.getTrendingAnime(30);
         setTrendingAnime(response.data);
       } catch (err) {
@@ -53,6 +60,7 @@ export function HomePage() {
     window.location.reload();
   };
 
+  // --- Early Returns for Data Fetching States ---
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorDisplay message={error} onRetry={handleRetry} />;
 
@@ -60,15 +68,16 @@ export function HomePage() {
     <div className="min-h-screen bg-dark">
       <Navbar />
 
-      {/* Hero Section with SVG Assets */}
+      {/* --- Section 1: Visual Identity --- */}
       <HeroSection
         characterImage={G5Luffy}
         backgroundImage={AnimeBackground}
       />
 
-      {/* Featured Anime Carousel Section */}
+      {/* --- Section 2: Featured Spotlights --- */}
       {trendingAnime.length > 0 && (
-        <Container>
+        <Container className="mt-[-4rem] relative z-30"> 
+          {/* Slight negative margin can help overlap the hero for a modern look */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -77,12 +86,13 @@ export function HomePage() {
             <h2 className="text-3xl sm:text-4xl font-bold mb-8 text-white">
               Featured Anime Picks
             </h2>
+            {/* Display the top 10 as the hero carousel */}
             <FeaturedAnimeCarousel animeList={trendingAnime.slice(0, 10)} />
           </motion.div>
         </Container>
       )}
 
-      {/* Popular Shows Carousel */}
+      {/* --- Section 3: Popular Content Row --- */}
       {trendingAnime.length > 0 && (
         <Container className="py-12 sm:py-16">
           <motion.div
@@ -99,7 +109,6 @@ export function HomePage() {
         </Container>
       )}
 
-      {/* Footer */}
       <Footer />
     </div>
   );

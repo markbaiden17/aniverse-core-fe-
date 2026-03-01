@@ -1,29 +1,29 @@
 @import "tailwindcss";
 
-/* 1. Import Google Fonts */
+/* 1. Typography: Google Fonts Import */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;600;700&display=swap');
 
 @theme {
-  /* Colors */
+  /* Brand Palette */
   --color-dark: #0a0a0a;
   --color-primary: #a855f7;
   --color-secondary: #c084fc;
   
-  /* 2. Font Styles */
+  /* 2. Font Family Variables */
   --font-inter: "Inter", ui-sans-serif, system-ui;
   --font-oswald: "Oswald", sans-serif;
 }
 
 @layer base {
+  /* 3. Global Body Defaults */
   body {
     background-color: var(--color-dark);
     color: white;
-    /* 3. Define body text */
     font-family: var(--font-inter);
     min-height: 100vh;
   }
 
-  /* 4. Define headings */
+  /* 4. Global Heading Styles */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-oswald);
     text-transform: uppercase;
@@ -31,7 +31,7 @@
   }
 }
 
-/* Scrollbar styling */
+/* --- UI Enhancements: Scrollbar styling --- */
 ::-webkit-scrollbar {
   width: 8px;
 }

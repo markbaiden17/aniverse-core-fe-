@@ -1,6 +1,8 @@
 /**
  * Pagination.tsx
- * Reusable pagination component for browsing multiple pages
+ * Navigation component for multi-page lists.
+ * Features: Dynamic ellipsis generation, current page highlighting, 
+ * and animated transitions for page numbers.
  */
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -17,29 +19,33 @@ export function Pagination({
   totalPages,
   onPageChange,
 }: PaginationProps) {
+  // --- Early Exit ---
   if (totalPages <= 1) return null;
 
+  // --- Logic: Generate Page Sequence ---
   const pageNumbers: (number | string)[] = [];
 
-  // Show first page
+  // Always include the first page
   pageNumbers.push(1);
 
-  // Show pages around current page
+  // Add leading ellipsis if current page is far from start
   if (currentPage > 3) {
     pageNumbers.push('...');
   }
 
+  // Calculate and add middle pages (current +/- 1)
   for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
     if (!pageNumbers.includes(i)) {
       pageNumbers.push(i);
     }
   }
 
-  // Show last page if totalPages > 1
+  // Add trailing ellipsis if current page is far from end
   if (currentPage < totalPages - 2) {
     pageNumbers.push('...');
   }
 
+  // Always include the last page
   if (totalPages > 1 && !pageNumbers.includes(totalPages)) {
     pageNumbers.push(totalPages);
   }
@@ -51,7 +57,7 @@ export function Pagination({
       transition={{ duration: 0.3 }}
       className="flex items-center justify-center gap-2 mt-12 mb-8"
     >
-      {/* Previous Button */}
+      {/* Action: Previous Page */}
       {currentPage > 1 && (
         <motion.button
           initial={{ opacity: 0 }}
@@ -64,6 +70,7 @@ export function Pagination({
         </motion.button>
       )}
 
+      {/* Page Number List */}
       {pageNumbers.map((page, index) => (
         <motion.div
           key={index}
@@ -72,13 +79,13 @@ export function Pagination({
           transition={{ delay: index * 0.05 }}
         >
           {page === '...' ? (
-            <span className="px-3 py-2 text-gray-400">...</span>
+            <span className="px-3 py-2 text-gray-400 select-none">...</span>
           ) : (
             <button
               onClick={() => onPageChange(page as number)}
               className={`px-3 py-2 rounded-lg font-bold transition-all text-sm ${
                 page === currentPage
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary text-white shadow-lg shadow-primary/20'
                   : 'bg-card text-gray-300 hover:bg-primary/20 hover:text-white'
               }`}
             >
@@ -88,7 +95,7 @@ export function Pagination({
         </motion.div>
       ))}
 
-      {/* Next Button */}
+      {/* Action: Next Page */}
       {currentPage < totalPages && (
         <motion.button
           initial={{ opacity: 0 }}

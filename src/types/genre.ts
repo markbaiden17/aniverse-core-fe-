@@ -1,6 +1,6 @@
 /**
  * genre.ts
- * TypeScript interfaces for genres
+ * TypeScript interfaces and constants for anime genres and categories.
  */
 
 export interface Genre {
@@ -9,6 +9,7 @@ export interface Genre {
 }
 
 export const ANIME_GENRES: Genre[] = [
+  // --- Discovery & Status Categories ---
   { id: '1', name: 'Popular Anime' },
   { id: '2', name: 'Ongoing Anime' },
   { id: '3', name: 'Upcoming Anime' },
@@ -17,6 +18,7 @@ export const ANIME_GENRES: Genre[] = [
   { id: '6', name: 'Trending' },
   { id: '7', name: 'Recently Added' },
 
+  // --- Thematic & Demographic Genres ---
   { id: '8', name: 'Action' },
   { id: '9', name: 'Adventure' },
   { id: '10', name: 'Card Games' },

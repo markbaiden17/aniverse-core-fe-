@@ -10,6 +10,8 @@ const ANILIST_API = import.meta.env.MODE === 'production'
   ? 'https://graphql.anilist.co'
   : 'http://localhost:3001/graphql';
 
+// --- Data Transformation ---
+
 // Convert AniList data to our Anime format
 const convertAniListToAnime = (anilistAnime: any): Anime => {
   return {
@@ -31,6 +33,8 @@ const convertAniListToAnime = (anilistAnime: any): Anime => {
     },
   };
 };
+
+// --- Trending Method ---
 
 /**
  * Get trending anime from AniList API
@@ -108,6 +112,8 @@ export const getTrendingAnime = async (
     };
   }
 };
+
+// --- Search Method ---
 
 /**
  * Search anime by title from AniList API
@@ -192,6 +198,8 @@ export const searchAnime = async (
   }
 };
 
+// --- Single Item Method ---
+
 /**
  * Get anime by ID from AniList API
  */
@@ -258,6 +266,8 @@ export const getAnimeById = async (id: string): Promise<Anime> => {
     return anime;
   }
 };
+
+// --- Genre Method ---
 
 /**
  * Get anime by genre from AniList API

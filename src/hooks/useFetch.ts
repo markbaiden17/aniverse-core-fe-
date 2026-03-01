@@ -1,11 +1,13 @@
 /**
  * useFetch.ts
- * Custom React hook for handling async API calls with loading and error states
- * Reduces code duplication across components that fetch data
+ * Custom React hook for handling async API calls with loading and error states.
+ * Features: Generic type support, race-condition prevention (isMounted), 
+ * and automatic cleanup to prevent memory leaks.
  */
 
 import { useState, useEffect } from 'react';
 
+// --- State Interface ---
 interface UseFetchState<T> {
   data: T | null;
   loading: boolean;
@@ -22,6 +24,8 @@ export function useFetch<T>(
   asyncFunction: () => Promise<T>,
   dependencies: React.DependencyList = []
 ): UseFetchState<T> {
+  
+  // Initialize state with loading: true to provide an immediate "Loading" signal
   const [state, setState] = useState<UseFetchState<T>>({
     data: null,
     loading: true,
@@ -29,11 +33,14 @@ export function useFetch<T>(
   });
 
   useEffect(() => {
-    let isMounted = true; // Prevent state update on unmounted component
+    // --- Guard: Prevent state updates on unmounted components ---
+    let isMounted = true; 
 
     const fetchData = async () => {
       try {
+        // Reset state for new fetch attempts
         setState((prev) => ({ ...prev, loading: true, error: null }));
+        
         const result = await asyncFunction();
 
         if (isMounted) {
@@ -48,6 +55,7 @@ export function useFetch<T>(
           setState({
             data: null,
             loading: false,
+            // Fallback for non-Error objects
             error: err instanceof Error ? err.message : 'An error occurred',
           });
         }
@@ -56,11 +64,11 @@ export function useFetch<T>(
 
     fetchData();
 
-    // Cleanup function to prevent memory leaks
+    // --- Cleanup: Lifecycle Management ---
     return () => {
-      isMounted = false;
+      isMounted = false; // Effectively cancels the state update if the component dies
     };
-  }, dependencies);
+  }, dependencies); // Re-runs whenever a provided dependency (like a category ID) changes
 
   return state;
 }

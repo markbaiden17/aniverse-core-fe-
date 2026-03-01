@@ -1,6 +1,7 @@
 /**
  * anime.ts
- * TypeScript interfaces for Kitsu API responses
+ * TypeScript interfaces for Kitsu API responses.
+ * Defines the core data structures used across the application.
  */
 
 export interface AnimeAttributes {
@@ -23,12 +24,20 @@ export interface AnimeAttributes {
   ageRatingGuide: string | null;
 }
 
+/**
+ * Standard Anime Node
+ * Represents a single entry in a list or search result.
+ */
 export interface Anime {
   id: string;
   type: string;
   attributes: AnimeAttributes;
 }
 
+/**
+ * Top-level API Wrapper
+ * Standard response format for collection-based endpoints.
+ */
 export interface KitsuResponse {
   data: Anime[];
   meta: {
@@ -36,6 +45,10 @@ export interface KitsuResponse {
   };
 }
 
+/**
+ * Extended Details
+ * Includes relationship mapping for genres and cast members.
+ */
 export interface AnimeDetail extends Anime {
   relationships?: {
     genres?: {

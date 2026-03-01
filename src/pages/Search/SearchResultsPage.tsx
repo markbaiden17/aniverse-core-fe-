@@ -21,6 +21,7 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 const ANIME_PER_PAGE = 30;
 
 export function SearchResultsPage() {
+  // --- Search State & URL Synchronization ---
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
   
@@ -29,6 +30,7 @@ export function SearchResultsPage() {
   const [loading, setLoading] = useState(true);
   const [watchlist, setWatchlist] = useLocalStorage<string[]>('watchlist', []);
 
+  // --- Search Lifecycle & Relevance Logic ---
   useEffect(() => {
     const performSearch = async () => {
       try {
@@ -49,15 +51,15 @@ export function SearchResultsPage() {
           const aTitle = a.attributes.title.toLowerCase();
           const bTitle = b.attributes.title.toLowerCase();
           
-          // Exact match gets highest priority
+          // Tier 1: Exact match gets highest priority
           if (aTitle === queryLower) return -1;
           if (bTitle === queryLower) return 1;
           
-          // Starts with query gets second priority
+          // Tier 2: Starts with query gets second priority
           if (aTitle.startsWith(queryLower)) return -1;
           if (bTitle.startsWith(queryLower)) return 1;
           
-          // Contains query gets third priority
+          // Tier 3: Contains query gets third priority
           if (aTitle.includes(queryLower)) return -1;
           if (bTitle.includes(queryLower)) return 1;
           
@@ -75,8 +77,9 @@ export function SearchResultsPage() {
     };
 
     performSearch();
-  }, [query]);
+  }, [query]); // Re-runs effect whenever URL query changes
 
+  // --- Handlers ---
   const handleAddToWatchlist = (animeId: string) => {
     setWatchlist((prev) =>
       prev.includes(animeId)
@@ -93,7 +96,7 @@ export function SearchResultsPage() {
     });
   };
 
-  // Pagination logic
+  // --- Pagination Slice Logic ---
   const totalPages = Math.ceil(results.length / ANIME_PER_PAGE);
   const startIndex = (currentPage - 1) * ANIME_PER_PAGE;
   const paginatedResults = results.slice(startIndex, startIndex + ANIME_PER_PAGE);
@@ -102,7 +105,7 @@ export function SearchResultsPage() {
     <div className="min-h-screen bg-dark">
       <Navbar />
 
-      {/* Header */}
+      {/* Header Container */}
       <Container className="py-12 sm:py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -125,11 +128,12 @@ export function SearchResultsPage() {
         </motion.div>
       </Container>
 
-      {/* Results Section */}
+      {/* Main Results Container */}
       <Container className="py-12 sm:py-16">
         {loading ? (
           <LoadingSpinner />
         ) : !query.trim() ? (
+          /* State: No Search Query */
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -144,8 +148,8 @@ export function SearchResultsPage() {
             </p>
           </motion.div>
         ) : results.length > 0 ? (
+          /* State: Results Found */
           <>
-            {/* Anime Grid */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -163,7 +167,6 @@ export function SearchResultsPage() {
               </AnimeGrid>
             </motion.div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <Pagination
                 currentPage={currentPage}
@@ -173,6 +176,7 @@ export function SearchResultsPage() {
             )}
           </>
         ) : (
+          /* State: Empty Results */
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -189,7 +193,6 @@ export function SearchResultsPage() {
         )}
       </Container>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

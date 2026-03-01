@@ -1,7 +1,7 @@
 /**
  * Carousel.tsx
- * Reusable carousel component for horizontal scrolling anime lists
- * Used for featured anime and popular shows sections
+ * A horizontal scrolling container for anime lists.
+ * Features: Smooth scrolling, dynamic arrow visibility, and hidden scrollbars.
  */
 
 import { useRef, useState, type ReactNode } from 'react';
@@ -19,22 +19,34 @@ export function Carousel({
   title,
   showControls = true,
 }: CarouselProps) {
+  // --- References & State ---
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
 
+  // --- Scroll Logic ---
+  
+  /**
+   * Updates arrow visibility based on the current scroll position.
+   */
   const handleScroll = () => {
     if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } =
-        scrollContainerRef.current;
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      
+      // Show left arrow if scrolled away from the start
       setShowLeftArrow(scrollLeft > 0);
+      
+      // Show right arrow if there is more content to the right (with 10px buffer)
       setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
     }
   };
 
+  /**
+   * Manually triggers horizontal scroll by a fixed amount.
+   */
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
-      const scrollAmount = 400;
+      const scrollAmount = 400; // Distance per click
       scrollContainerRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth',
@@ -44,16 +56,17 @@ export function Carousel({
 
   return (
     <div className="relative">
-      {/* Title */}
+      {/* Optional Section Title */}
       {title && (
         <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-white">
           {title}
         </h2>
       )}
 
-      {/* Carousel Container */}
+      {/* Main Container */}
       <div className="relative group">
-        {/* Left Arrow */}
+        
+        {/* Navigation: Left Arrow */}
         {showControls && showLeftArrow && (
           <motion.button
             initial={{ opacity: 0 }}
@@ -66,7 +79,7 @@ export function Carousel({
           </motion.button>
         )}
 
-        {/* Carousel */}
+        {/* Scrollable Viewport */}
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
@@ -78,7 +91,7 @@ export function Carousel({
           </div>
         </div>
 
-        {/* Right Arrow */}
+        {/* Navigation: Right Arrow */}
         {showControls && showRightArrow && (
           <motion.button
             initial={{ opacity: 0 }}
@@ -92,14 +105,14 @@ export function Carousel({
         )}
       </div>
 
-      {/* Hide Scrollbar */}
+      {/* Global Style Override: Hide scrollbar across browsers */}
       <style>{`
         .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;     /* Firefox */
         }
         .scrollbar-hide::-webkit-scrollbar {
-          display: none;
+          display: none;             /* Chrome, Safari, and Opera */
         }
       `}</style>
     </div>

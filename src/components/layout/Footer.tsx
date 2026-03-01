@@ -7,16 +7,18 @@ import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Youtube, Instagram } from 'lucide-react';
 
 export function Footer() {
+  // --- Year Helper ---
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-darker border-t border-primary/20 mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        {/* Footer Content Grid */}
+        
+        {/* Main Footer Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          
           {/* Brand Column */}
           <div>
-            {/* Added font-oswald to match your design requirements */}
             <h3 className="text-2xl font-oswald font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
               アニメAniVerse 
             </h3>
@@ -124,9 +126,8 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Divider */}
+        {/* Bottom Attribution Section */}
         <div className="border-t border-primary/20 pt-8">
-          {/* Bottom Info */}
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-gray-400 text-sm font-inter">
               © {currentYear} AniVerse. All rights reserved.
@@ -144,6 +145,7 @@ export function Footer() {
             </p>
           </div>
         </div>
+
       </div>
     </footer>
   );

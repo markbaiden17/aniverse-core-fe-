@@ -1,13 +1,22 @@
+/**
+ * Navbar.tsx
+ * Global navigation component.
+ * Features: Responsive search bar, sticky positioning, 
+ * and a collapsible mobile menu with custom iconography.
+ */
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Bookmark, User, Home, Binoculars, Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function Navbar() {
+  // --- State & Hooks ---
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  // --- Logic: Search Execution ---
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -16,6 +25,7 @@ export function Navbar() {
     }
   };
 
+  // --- Logic: Mobile Menu Interaction ---
   const handleMobileMenuItemClick = () => {
     setMobileMenuOpen(false);
   };
@@ -24,7 +34,8 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 bg-dark border-b border-primary/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo - AV on mobile, full on desktop */}
+          
+          {/* 1. Branding: Logo (Responsive Text) */}
           <Link to="/" className="text-2xl font-bold flex-shrink-0">
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               <span className="sm:hidden">AV</span>
@@ -32,7 +43,7 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Search Bar */}
+          {/* 2. Desktop-Only: Integrated Search Bar */}
           <form
             onSubmit={handleSearch}
             className="hidden sm:flex flex-1 max-w-md mx-8"
@@ -54,7 +65,7 @@ export function Navbar() {
             </div>
           </form>
 
-          {/* Desktop Navigation */}
+          {/* 3. Desktop-Only: Navigation Links & Actions */}
           <div className="hidden sm:flex items-center gap-6">
             <Link
               to="/"
@@ -69,7 +80,6 @@ export function Navbar() {
               Discover
             </Link>
 
-            {/* Icons */}
             <Link
               to="/watchlist"
               className="text-gray-300 hover:text-primary transition-colors"
@@ -85,9 +95,8 @@ export function Navbar() {
             </button>
           </div>
 
-          {/* Mobile View - Search bar and Menu */}
+          {/* 4. Mobile-Only: Compressed Search & Hamburger Toggle */}
           <div className="sm:hidden flex items-center gap-3">
-            {/* Mobile Search Bar */}
             <form
               onSubmit={handleSearch}
               className="flex-1 max-w-xs"
@@ -109,7 +118,6 @@ export function Navbar() {
               </div>
             </form>
 
-            {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-gray-300 hover:text-primary transition-colors"
@@ -120,7 +128,7 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Collapsible Menu */}
+        {/* 5. Mobile-Only: Collapsible Menu Drawer */}
         {mobileMenuOpen && (
           <div className="sm:hidden border-t border-primary/20 bg-dark">
             <div className="px-4 py-4 space-y-3 flex flex-col">
