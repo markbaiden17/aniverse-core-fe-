@@ -108,7 +108,7 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
                       <span className="text-white font-bold">{episodeCount}</span>
                     </div>
                   )}
-                  {averageRating && (
+                  {averageRating && averageRating > 0 && (
                     <div className="bg-secondary/20 px-4 py-2 rounded-lg">
                       <span className="text-gray-300">Rating: </span>
                       <span className="text-white font-bold">
