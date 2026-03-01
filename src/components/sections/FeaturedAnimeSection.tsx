@@ -26,6 +26,9 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
 
   const isInWatchlist = watchlist.includes(id);
 
+  // FIX: Strips leading <br> tags and whitespace that push text down and cause cut-offs
+  const cleanDescription = description?.replace(/^(<br\s*\/?>|\s)+/gi, '');
+
   const handlePrevious = () => {
     setCurrentIndex((prev) => (prev === 0 ? animeList.length - 1 : prev - 1));
   };
@@ -51,12 +54,9 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
     touchEndX.current = e.changedTouches[0].clientX;
     const difference = touchStartX.current - touchEndX.current;
 
-    // Swiped left (show next)
     if (difference > 50) {
       handleNext();
-    }
-    // Swiped right (show previous)
-    else if (difference < -50) {
+    } else if (difference < -50) {
       handlePrevious();
     }
   };
@@ -112,22 +112,23 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
                   )}
                 </div>
 
-                {/* Description - Hidden on mobile */}
-                {description && (
-                  <div className="hidden sm:block h-24 mb-8 overflow-hidden flex-grow">
-                    <p className="text-gray-300 text-sm sm:text-base line-clamp-4">
-                      {description}
-                    </p>
+                {/* Description - Rendered as HTML to fix <i> tags and cleaned to fix cut-offs */}
+                {cleanDescription && (
+                  <div className="hidden sm:block h-32 mb-8 overflow-hidden flex-grow">
+                    <p 
+                      className="text-gray-300 text-sm sm:text-base line-clamp-5"
+                      dangerouslySetInnerHTML={{ __html: cleanDescription }}
+                    />
                   </div>
                 )}
 
-                {/* Buttons - Desktop: Full buttons, Mobile: Icons only */}
+                {/* Buttons */}
                 <div className="flex gap-2 sm:gap-4 justify-center md:justify-start">
                   <Link
                     to={`/anime/${id}`}
-                    className="flex items-center gap-2 px-3 sm:px-8 py-2 sm:py-3 bg-primary hover:bg-secondary text-white font-bold rounded-lg transition-colors"
+                    className="flex items-center justify-center gap-2 px-3 sm:px-8 h-11 bg-primary hover:bg-secondary text-white font-bold rounded-lg transition-colors"
                   >
-                    <Play size={18} className="sm:w-5 sm:h-5" />
+                    <Play size={18} className="shrink-0" />
                     <span className="hidden sm:inline">Start Watching</span>
                   </Link>
 
@@ -135,8 +136,8 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
                     onClick={handleAddToWatchlist}
                     className={`flex items-center justify-center gap-2 rounded-lg transition-all font-bold w-[200px] h-11 border-2 ${
                       isInWatchlist
-                        ? 'bg-primary text-white hover:bg-secondary'
-                        : 'bg-card border-2 border-primary text-primary hover:bg-primary hover:text-white'
+                        ? 'bg-primary border-primary text-white hover:bg-secondary hover:border-secondary'
+                        : 'bg-transparent border-primary text-primary hover:bg-primary hover:text-white'
                     }`}
                   >
                     {isInWatchlist ? (
@@ -168,7 +169,6 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
           <ChevronLeft size={24} />
         </button>
 
-        {/* Indicator dots */}
         <div className="flex gap-2">
           {animeList.map((_, index) => (
             <button
