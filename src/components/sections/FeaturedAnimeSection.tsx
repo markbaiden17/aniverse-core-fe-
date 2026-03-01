@@ -132,11 +132,12 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
                   </Link>
                   <button
                     onClick={handleAddToWatchlist}
-                    className={`flex items-center gap-2 px-3 sm:px-8 py-2 sm:py-3 font-bold rounded-lg transition-all whitespace-nowrap w-40 sm:w-48 ${
+                    className={`flex items-center justify-center gap-2 px-3 sm:px-8 py-2 sm:py-3 font-bold rounded-lg transition-all ${
                       isInWatchlist
                         ? 'bg-primary text-white hover:bg-secondary'
                         : 'bg-card border-2 border-primary text-primary hover:bg-primary hover:text-white'
                     }`}
+                    style={{ minWidth: '160px' }}
                   >
                     {isInWatchlist ? (
                       <>
