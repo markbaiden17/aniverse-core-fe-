@@ -6,7 +6,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Play, Share2, BookmarkPlus } from 'lucide-react';
+import { Play, Share2, BookmarkPlus, Star } from 'lucide-react'; 
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
 import { Container } from '../../components/layout/Container';
@@ -32,15 +32,11 @@ export function AnimeDetailPage() {
         setLoading(true);
         setError(null);
 
-        if (!id) {
-          throw new Error('No anime ID provided');
-        }
+        if (!id) throw new Error('No anime ID provided');
 
-        // Fetch the anime with the ID from the URL parameter
         const animeData = await kitsuService.getAnimeById(id);
         setAnime(animeData);
 
-        // Fetch similar anime
         const allAnime = await kitsuService.getTrendingAnime(100);
         const similar = allAnime.data
           .filter((a) => a.id !== id)
@@ -55,7 +51,7 @@ export function AnimeDetailPage() {
     };
 
     fetchAnime();
-  }, [id]); // Include id in dependency array
+  }, [id]);
 
   const handleAddToWatchlist = () => {
     if (!anime) return;
@@ -66,13 +62,14 @@ export function AnimeDetailPage() {
     );
   };
 
-  const handleRetry = () => {
-    window.location.reload();
+  const stripHtml = (html: string | null | undefined) => {
+    if (!html) return ''; 
+    return html.replace(/<[^>]*>?/gm, '');
   };
 
   if (loading) return <LoadingSpinner />;
-  if (error) return <ErrorDisplay message={error} onRetry={handleRetry} />;
-  if (!anime) return <ErrorDisplay message="Anime not found." onRetry={handleRetry} />;
+  if (error) return <ErrorDisplay message={error} onRetry={() => window.location.reload()} />;
+  if (!anime) return <ErrorDisplay message="Anime not found." onRetry={() => window.location.reload()} />;
 
   const {
     attributes: {
@@ -81,6 +78,8 @@ export function AnimeDetailPage() {
       averageRating,
       episodeCount,
       status,
+      coverImage,
+      posterImage,
     },
   } = anime;
 
@@ -91,24 +90,31 @@ export function AnimeDetailPage() {
     <div className="min-h-screen bg-dark">
       <Navbar />
 
-      {/* Hero Section - Title Centered */}
-      <div className="relative py-16 sm:py-24 bg-gradient-to-b from-primary/20 to-transparent border-b border-primary/20">
-        <Container>
+      {/* Hero Section */}
+      <div className="relative h-[400px] sm:h-[500px] w-full overflow-hidden flex items-center justify-center">
+        <div 
+          className="absolute inset-0 bg-[length:100%_auto] bg-no-repeat bg-top z-0"
+          style={{ backgroundImage: `url(${coverImage?.original || posterImage?.original})` }}
+        />
+        <div className="absolute inset-0 bg-black/60 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-dark via-transparent to-black/40 z-10" />
+
+        <Container className="relative z-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="text-center"
+            transition={{ duration: 0.5 }}
+            className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-5xl sm:text-6xl font-bold text-white mb-8">
+            <h1 className="text-4xl sm:text-7xl font-bold text-white mb-8 tracking-tight drop-shadow-2xl">
               {title}
             </h1>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-3 px-8 py-4 bg-primary hover:bg-secondary text-white font-bold rounded-lg transition-colors"
+              className="inline-flex items-center gap-3 px-10 py-4 bg-primary hover:bg-secondary text-white font-bold rounded-lg transition-all shadow-xl shadow-primary/20"
             >
-              <Play size={24} />
+              <Play size={24} fill="currentColor" />
               Start Watching
             </motion.button>
           </motion.div>
@@ -121,94 +127,121 @@ export function AnimeDetailPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.1 }}
-          className="grid grid-cols-1 lg:grid-cols-4 gap-8"
+          className="grid grid-cols-1 lg:grid-cols-4 gap-12 items-stretch"
         >
-          {/* Left: Poster Placeholder and Actions */}
+          {/* Left: Poster and Actions */}
           <div className="flex flex-col gap-6">
-            {/* Poster Placeholder - Taller */}
-            <div className="w-full h-96 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg border-2 border-primary/30 flex items-center justify-center">
-              <span className="text-gray-400 text-sm">Poster</span>
+            <div className="relative overflow-hidden rounded-xl border-2 border-white/5 shadow-2xl">
+              <img 
+                src={posterImage?.large || posterImage?.original} 
+                alt={title}
+                className="w-full h-auto object-cover"
+              />
             </div>
 
-            {/* Action Buttons */}
             <div className="flex flex-col gap-3">
               <button
                 onClick={handleAddToWatchlist}
-                className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-bold transition-all ${
+                className={`flex items-center justify-center gap-2 px-6 py-4 rounded-lg font-bold transition-all ${
                   isInWatchlist
-                    ? 'bg-primary text-white hover:bg-secondary'
-                    : 'bg-card border-2 border-primary text-primary hover:bg-primary hover:text-white'
+                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                    : 'bg-card border-2 border-primary/50 text-primary hover:bg-primary/5'
                 }`}
               >
                 <BookmarkPlus size={20} />
                 {isInWatchlist ? 'In Watchlist' : 'Add to Watchlist'}
               </button>
-              <button className="flex items-center justify-center gap-2 px-6 py-3 bg-card border-2 border-gray-600 text-gray-300 hover:text-white hover:border-primary rounded-lg font-bold transition-all">
+              <button className="flex items-center justify-center gap-2 px-6 py-4 bg-card border-2 border-white/10 text-gray-400 hover:text-white rounded-lg font-bold transition-all">
                 <Share2 size={20} />
                 Share
               </button>
             </div>
           </div>
 
-          {/* Right: Synopsis and Details (3 columns) */}
-          <div className="lg:col-span-3 space-y-6">
-            {/* Synopsis Section */}
-            <div>
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                <span className="text-primary">▶</span> Synopsis
+          {/* Right: Synopsis and Details */}
+          <div className="lg:col-span-3 flex flex-col">
+            <div className="mb-auto">
+              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+                <span className="w-1.5 h-8 bg-primary rounded-full" />
+                Synopsis
               </h2>
-              <p className="text-gray-300 leading-relaxed text-sm">
-                {description}
+              <p className="text-gray-300 leading-relaxed text-base">
+                {stripHtml(description)}
               </p>
-
-              {/* Rating */}
-              {rating !== 'N/A' && (
-                <p className="text-gray-300 mt-4">
-                  <span className="text-gray-400">Rating:</span>{' '}
-                  <span className="font-bold text-white">{rating}%</span>
-                </p>
-              )}
             </div>
 
-            {/* Details - Horizontal List */}
-            <div className="flex flex-wrap gap-6">
-              <div>
-                <p className="text-gray-400 text-xs uppercase tracking-wide mb-1">Type</p>
-                <p className="text-white font-bold">Anime</p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-xs uppercase tracking-wide mb-1">Episodes</p>
-                <p className="text-white font-bold">{episodeCount || 'N/A'}</p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-xs uppercase tracking-wide mb-1">Status</p>
-                <p className="text-white font-bold capitalize">{status}</p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-xs uppercase tracking-wide mb-1">Source</p>
-                <p className="text-white font-bold">Manga</p>
+            {/* Score and Details Section anchored at bottom */}
+            <div className="mt-12">
+              {rating !== 'N/A' && (
+                <div className="mb-8 inline-flex items-center gap-4 px-6 py-4 bg-white/5 rounded-2xl border border-white/10 shadow-xl">
+                  <div className="bg-primary/20 p-2 rounded-lg">
+                    <Star className="text-primary fill-primary" size={24} />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-xs uppercase font-bold tracking-widest">Score</p>
+                    <p className="text-2xl font-black text-white">{rating}%</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Details Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-8 border-t border-white/5">
+                <div>
+                  <p className="text-gray-500 text-[10px] uppercase tracking-widest mb-1">Type</p>
+                  <p className="text-white font-bold text-lg">Anime</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-[10px] uppercase tracking-widest mb-1">Episodes</p>
+                  <p className="text-white font-bold text-lg">{episodeCount || 'N/A'}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-[10px] uppercase tracking-widest mb-1">Status</p>
+                  <p className="text-white font-bold text-lg capitalize">{status}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-[10px] uppercase tracking-widest mb-1">Format</p>
+                  <p className="text-white font-bold text-lg">TV Series</p>
+                </div>
               </div>
             </div>
           </div>
         </motion.div>
       </Container>
 
-      {/* More Like This Section */}
-      {similarAnime.length > 0 && (
-        <Container className="py-12 sm:py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-          >
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white">
-                More Like This
-              </h2>
-              <Link
-                to="/discover"
-                className="text-primary hover:text-secondary transition-colors"
+      {/* Episode List Section */}
+      <Container className="pb-16">
+        <div className="bg-card/40 rounded-2xl border border-white/5 p-6 sm:p-8">
+          <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            Episode List
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+            {[...Array(episodeCount || 12)].map((_, i) => (
+              <div 
+                key={i} 
+                className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5 hover:bg-primary/10 hover:border-primary/30 transition-all group cursor-pointer"
               >
+                <div className="flex items-center gap-4">
+                  <span className="text-gray-600 font-mono text-xs">{(i + 1).toString().padStart(2, '0')}</span>
+                  <p className="text-white font-medium text-sm group-hover:text-primary transition-colors">Episode {i + 1}</p>
+                </div>
+                <Play size={14} className="text-gray-600 group-hover:text-primary" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </Container>
+
+      {/* Recommendations */}
+      {similarAnime.length > 0 && (
+        <div className="bg-card/20 py-20 border-t border-white/5">
+          <Container>
+            <div className="flex justify-between items-end mb-12">
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-2">More Like This</h2>
+                <p className="text-gray-500 text-sm">Based on genres you might enjoy</p>
+              </div>
+              <Link to="/discover" className="text-primary text-xs md:text-sm font-bold hover:underline whitespace-nowrap">
                 View All
               </Link>
             </div>
@@ -218,11 +251,10 @@ export function AnimeDetailPage() {
                 <CarouselAnimeCard key={animeItem.id} anime={animeItem} />
               ))}
             </Carousel>
-          </motion.div>
-        </Container>
+          </Container>
+        </div>
       )}
 
-      {/* Footer */}
       <Footer />
     </div>
   );
