@@ -26,7 +26,6 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
 
   const isInWatchlist = watchlist.includes(id);
 
-  // FIX: Strips leading <br> tags and whitespace that push text down and cause cut-offs
   const cleanDescription = description?.replace(/^(<br\s*\/?>|\s)+/gi, '');
 
   const handlePrevious = () => {
@@ -112,11 +111,11 @@ export function FeaturedAnimeCarousel({ animeList }: FeaturedAnimeCarouselProps)
                   )}
                 </div>
 
-                {/* Description - Rendered as HTML to fix <i> tags and cleaned to fix cut-offs */}
+                {/* Description */}
                 {cleanDescription && (
-                  <div className="hidden sm:block h-32 mb-8 overflow-hidden flex-grow">
+                  <div className="hidden sm:block mb-8 flex-grow">
                     <p 
-                      className="text-gray-300 text-sm sm:text-base line-clamp-5"
+                      className="text-gray-300 text-sm sm:text-base line-clamp-3 md:line-clamp-4 lg:line-clamp-5"
                       dangerouslySetInnerHTML={{ __html: cleanDescription }}
                     />
                   </div>
